@@ -7,6 +7,7 @@ import {
   TrendingUp,
   Heart,
   Plus,
+  Share2,
   Calendar,
   MapPin,
   ArrowRight,
