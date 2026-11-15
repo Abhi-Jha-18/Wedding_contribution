@@ -22,6 +22,7 @@ class Couple(TimestampMixin, Base):
     wedding_date: Mapped[date | None] = mapped_column(Date)
     venue: Mapped[str | None] = mapped_column(String(255))
     story: Mapped[str | None] = mapped_column(Text)
+    photo: Mapped[str | None] = mapped_column(String(2048))
 
     owner: Mapped["User"] = relationship(back_populates="couple")
     wishlist: Mapped["Wishlist | None"] = relationship(
