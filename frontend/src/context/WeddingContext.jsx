@@ -34,15 +34,19 @@ export function WeddingProvider({ children }) {
   });
   const [loading, setLoading] = useState(true);
 
-  // Load wishlist and contributions
+  // Load wedding profile, wishlist and contributions
   useEffect(() => {
     async function loadData() {
       setLoading(true);
       try {
-        const items = await wishlistService.getWishlistItems(coupleId);
-        const contribs = await wishlistService.getContributions(coupleId);
-        setWishlistItems(items);
-        setContributions(contribs);
+        const [profile, items, contribs] = await Promise.all([
+          weddingService.getWeddingProfile(coupleId),
+          wishlistService.getWishlistItems(coupleId),
+          wishlistService.getContributions(coupleId),
+        ]);
+        if (profile) setWeddingProfile(profile);
+        if (items) setWishlistItems(items);
+        if (contribs) setContributions(contribs);
       } catch (err) {
         console.error('Failed to load wedding data', err);
       } finally {
@@ -126,13 +130,9 @@ export function WeddingProvider({ children }) {
     return newContrib;
   };
 
-  const addGuestWish = (wishData) => {
-    const newWish = {
-      id: 'gw' + Date.now(),
-      guestName: wishData.guestName || 'Well-wisher',
-      message: wishData.message,
-      createdAt: new Date().toISOString(),
-    };
+  const addGuestWish = async (wishData) => {
+    const slug = weddingProfile?.slug || 'arjun-and-priya';
+    const newWish = await wishlistService.postGuestWish(slug, wishData);
     setGuestWishes((prev) => {
       const updated = [newWish, ...prev];
       localStorage.setItem(WISHES_KEY, JSON.stringify(updated));

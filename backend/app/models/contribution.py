@@ -1,6 +1,6 @@
 """Demo-only guest contributions; no payment provider or payment processing."""
 
-from sqlalchemy import CheckConstraint, ForeignKey, Integer, String
+from sqlalchemy import CheckConstraint, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin
@@ -19,6 +19,7 @@ class Contribution(TimestampMixin, Base):
     )
     contributor_name: Mapped[str | None] = mapped_column(String(120))
     amount_paise: Mapped[int] = mapped_column(Integer, nullable=False)
+    message: Mapped[str | None] = mapped_column(Text, nullable=True)
     # Intentionally fixed to DEMO until a separate, explicitly approved phase.
     payment_mode: Mapped[str] = mapped_column(String(20), default="DEMO", nullable=False)
 

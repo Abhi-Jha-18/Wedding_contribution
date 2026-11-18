@@ -1,6 +1,6 @@
-# Wedding Wishlist API — Authentication & Wedding Profiles (Phase 2)
+# Wedding Wishlist API — Wishlist, Contributions & Guestbook (Milestone 3)
 
-FastAPI + SQLAlchemy + PostgreSQL. Authentication and wedding profile APIs are implemented. The existing React/Vite frontend is unchanged; frontend integration, wishlist, guestbook, contribution and payment APIs remain out of scope.
+FastAPI + SQLAlchemy + PostgreSQL. Authentication, wedding profiles, wishlist management, guest contributions (demo-only), and guestbook wishes are fully implemented and integrated with the React frontend.
 
 ## Setup
 
@@ -225,4 +225,32 @@ Phase 2 additions:
 - `alembic/versions/0003_couple_photo.py`: additive, data-preserving migration.
 - `tests/test_couple.py`: profile behavior, privacy, ownership, validation, uniqueness recovery and process-restart persistence.
 
-No wishlist, contribution, guestbook or payment endpoints were added.
+Phase 3 additions (Milestone 3):
+- `app/models/wishlist.py`: Wishlist item model with title, target amount in paise, description, image, priority, category.
+- `app/models/contribution.py`: Demo contribution ledger model with item foreign key, contributor name, paise amount, note message, and `payment_mode = 'DEMO'` check constraint.
+- `app/schemas/wishlist.py`: Schemas for item creation, update, and owner/public response representations.
+- `app/schemas/contribution.py`: Schemas for guest contributions (demo-only) and contribution summary lists.
+- `app/schemas/guest_message.py`: Schemas for public wedding wishes and owner guestbook inbox.
+- `app/services/wishlist.py`: CRUD business logic for wishlists, ownership checks, target calculations.
+- `app/services/contribution.py`: Contribution handling, status checking (full funding), and aggregate totals.
+- `app/services/guest_message.py`: Guestbook message creation and retrieval.
+- `app/routes/wishlist.py`: `GET/POST /api/wishlists/me/items`, `PUT/DELETE /api/wishlists/me/items/{id}`, `GET /api/couples/{slug}/wishlist`.
+- `app/routes/contribution.py`: `POST /api/wishlist-items/{id}/contribute`, `GET /api/contributions/me`.
+- `app/routes/guest_message.py`: `POST/GET /api/couples/{slug}/messages`, `GET /api/messages/me`.
+- `alembic/versions/0004_wishlist_category_and_message.py`: Migration adding `category` to `wishlist_items` and `message` to `contributions`.
+- `tests/test_wishlist.py`, `tests/test_contribution.py`, `tests/test_guest_message.py`: Unit and integration test suites covering all Milestone 3 endpoints.
+
+## Milestone 3 API Summary
+
+| Method | Endpoint | Auth | Purpose |
+| --- | --- | --- | --- |
+| GET | `/api/wishlists/me/items` | Bearer JWT | List couple's wishlist items |
+| POST | `/api/wishlists/me/items` | Bearer JWT | Create new wishlist item |
+| PUT | `/api/wishlists/me/items/{id}` | Bearer JWT | Update wishlist item |
+| DELETE | `/api/wishlists/me/items/{id}` | Bearer JWT | Delete wishlist item |
+| GET | `/api/couples/{slug}/wishlist` | None | Public view of couple's wishlist |
+| POST | `/api/wishlist-items/{id}/contribute` | None | Guest contribution (Demo only) |
+| GET | `/api/contributions/me` | Bearer JWT | Couple's received contribution ledger |
+| POST | `/api/couples/{slug}/messages` | None | Guest posts wedding wish |
+| GET | `/api/couples/{slug}/messages` | None | Public wedding wishes |
+| GET | `/api/messages/me` | Bearer JWT | Owner's received guest messages |

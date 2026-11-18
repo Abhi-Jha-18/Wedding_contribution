@@ -42,6 +42,7 @@ class WishlistItem(TimestampMixin, Base):
     target_amount_paise: Mapped[int | None] = mapped_column(Integer)
     quantity: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
     display_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    category: Mapped[str | None] = mapped_column(String(60), default="Other", nullable=True)
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
 
     wishlist: Mapped["Wishlist"] = relationship(back_populates="items")

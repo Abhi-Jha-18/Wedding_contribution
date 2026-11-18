@@ -7,7 +7,7 @@ A wedding wishlist and contribution platform with a React/Vite frontend and a Fa
 - `frontend/` — React 19 application, built and served with Vite.
 - `backend/` — FastAPI application, SQLAlchemy models, and Alembic database migrations.
 
-The frontend includes public landing and wedding pages, registration/login pages, and dashboard screens for wedding profiles, wishlists, contributions, QR codes, and settings. The backend currently provides status, authentication, and wedding-profile APIs. Wishlist, guestbook, contribution, and payment APIs are not implemented yet; frontend screens should not be assumed to persist data through the backend.
+The frontend includes public landing and wedding pages, registration/login pages, and dashboard screens for wedding profiles, wishlists, contributions, QR codes, and settings. The backend provides authentication, couple profiles, wishlist management, guest contributions (demo-only), and guestbook wishes. The frontend communicates with the live FastAPI backend via `apiClient.js` with automatic offline local fallback.
 
 ## Requirements
 
